@@ -40,6 +40,11 @@ function callback(response){
     var line = d3.svg.line()
         .x(function(d) { return scaleX(d.dates); })
         .y(function(d) { return scaleY(d.val); });
+
+    var area = d3.svg.area()
+        .x(function(d) { return scaleX(d.dates); })
+        .y0(h)
+        .y1(function(d) { return scaleY(d.val); });
     
     var axisX = d3.svg.axis()
         .scale(scaleX)
@@ -119,6 +124,12 @@ function callback(response){
             'stroke':'#165A4A',
             'stroke-width': '2px',
             'fill':'none',
+            'transform':'translate(40,-30)' 
+        });
+    svgStart.append('path')
+        .attr({
+            'd':area(mydata2),
+            'fill':'rgba(28,90,74,.2)',
             'transform':'translate(40,-30)' 
         });
 }
