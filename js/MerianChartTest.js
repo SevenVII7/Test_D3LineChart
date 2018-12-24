@@ -32,7 +32,6 @@ function callback(response){
     var scaleX = d3.time.scale()
         .range([0,(w - 40)])
         .domain([minX,maxX]);
-
     var scaleY = d3.scale.linear()
         .range([h,40])
         .domain([minY,maxY]);
@@ -40,7 +39,6 @@ function callback(response){
     var line = d3.svg.line()
         .x(function(d) { return scaleX(d.dates); })
         .y(function(d) { return scaleY(d.val); });
-
     var area = d3.svg.area()
         .x(function(d) { return scaleX(d.dates); })
         .y0(h)
@@ -51,7 +49,6 @@ function callback(response){
         .orient("bottom")
         .tickFormat(d3.time.format("%x"))
         .ticks(6);
-
     var axisY = d3.svg.axis()
         .scale(scaleY)
         .orient("left")
@@ -63,13 +60,29 @@ function callback(response){
         .ticks(0)
         .tickFormat("")
         .tickSize(-h+30,0);
-
     var axisYGrid = d3.svg.axis()
         .scale(scaleY)
         .orient("left")
         .ticks(5)
         .tickFormat("")
         .tickSize(-w+40,0);
+
+    var defs = svgStart.append("defs");
+    var linearGradient = defs.append("linearGradient")
+        .attr({
+            "id":"linearColor",
+            "x1":"0%",
+            "x2":"0%",
+            "y1":"0%",
+            "y2":"100%"
+        });
+    linearGradient.append("stop")
+        .attr("offset","0%")
+        .style("stop-color","rgba(22,90,74,.2)");
+    linearGradient.append("stop")
+        .attr("offset","100%")
+        .style("stop-color","rgba(205,226,113,.2)");
+
 
     svgStart.append('g')
         .call(axisX)
@@ -129,7 +142,7 @@ function callback(response){
     svgStart.append('path')
         .attr({
             'd':area(mydata2),
-            'fill':'rgba(28,90,74,.2)',
+            'fill':'url(#' + linearGradient.attr('id') + ')',
             'transform':'translate(40,-30)' 
         });
 }
