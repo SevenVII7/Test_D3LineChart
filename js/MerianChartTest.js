@@ -1,5 +1,5 @@
 function sendRequest(){
-    var url = "MerianChartTestData.js",
+    var url = "js/MerianChartTestData.js",
         scriptTag = document.createElement("script");
     scriptTag.src = url;
     document.body.appendChild(scriptTag);
@@ -19,8 +19,10 @@ function callback(response){
     var h = 250;
     var svgStart = d3.select("#content .chart")
         .append("svg")
-        .attr("width", w)
-        .attr("height", h);
+        .attr({
+            "width": w,
+            "height": h
+        });
 
     var minX = d3.min(mydata2, function(d){return d.dates});
     var maxX = d3.max(mydata2, function(d){return d.dates});
