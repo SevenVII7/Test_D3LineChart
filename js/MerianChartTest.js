@@ -14,7 +14,6 @@ function callback(response){
         mydata2[i].val = mydata2[i].val;
     };
     for(k=0; k < 7; k++){
-        // if(mydata2[k] == undefined){mydata2.push({"dates":"0", "val":"0"});}   efeofko
         mydata3.push(mydata2[k]);
     };
     drawChart();
