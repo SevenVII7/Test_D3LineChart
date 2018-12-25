@@ -13,9 +13,10 @@ function callback(response){
         mydata2[i].dates = new Date(mydata2[i].dates);
         mydata2[i].val = mydata2[i].val;
     };
-    for(k=0; k < 11; k++){
+    for(k=0; k < 7; k++){
+        // if(mydata2[k] == undefined){mydata2.push({"dates":"0", "val":"0"});}
         mydata3.push(mydata2[k]);
-    }
+    };
     drawChart();
 }
 
