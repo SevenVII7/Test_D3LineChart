@@ -60,7 +60,7 @@ function drawChart(){
     var axisX = d3.svg.axis()
         .scale(scaleX) // axis.scale([scale]) 按照 scale的比例縮放 <-- 這邊也是塞之前定義好的 scale變數
         .orient("bottom")
-        .tickFormat(d3.time.format("%x")) // 改變底部座標軸顯示格式(Time Format) https://www.oxxostudio.tw/articles/201412/svg-d3-11-time.html
+        .tickFormat(d3.time.format("%Y.%m.%d")) // 改變底部座標軸顯示格式(Time Format) https://www.oxxostudio.tw/articles/201412/svg-d3-11-time.html
         .ticks(xTickNum); // axis.ticks 圖表座標軸分段, 運作原理: https://www.tangshuang.net/3270.html
     var axisY = d3.svg.axis()
         .scale(scaleY)
@@ -103,26 +103,7 @@ function drawChart(){
     var tooltip = d3.select("body")
         .append("div")
         .attr("class","tooltip")
-        .style("opacity",0.0); // 先生出一個隱形的 div等待 hover, 其他樣式我寫在HTML
-
-    // tooltip.html(mydata2[0].dates + "<br />" + mydata2[0].dates)
-    //     .style("left", (d3.event.pageX) + "px")
-    //     .style("top", (d3.event.pageY + 20) + "px")
-    //     .style("opacity",1.0);
-
-    svgStart.append('g')
-        .selectAll('circle')
-        .data(mydata2)
-        .enter()
-        .append('circle')
-        .attr({'fill': '#aaa'})
-        .attr("cx", function(d) {
-            return d.dates;
-        })
-        .attr("cy", function(d) {
-            return d.val;
-        })
-        .attr("r", 5);
+        .style({"opacity": 0}); // 先生出一個隱形的 div等待 hover, 其他樣式我寫在HTML
 
 // ========== 使用函式 ==========
 // --- 繪製座標 ---
@@ -139,7 +120,10 @@ function drawChart(){
             'stroke':'none',
             'transform':'translate(0,10)'
         })
-        .style('font-size','12px');
+        .style({
+            'font-size':'12px',
+            'letter-spacing': '1px'
+        });
     svgStart.append('g')
         .call(axisY)
         .attr({
@@ -153,7 +137,10 @@ function drawChart(){
             'stroke':'none',
             'transform':'translate(-10,0)'
         })
-        .style('font-size','12px');
+        .style({
+            'font-size':'12px',
+            'letter-spacing': '1px'
+        });
 
 // --- 繪製格線 ---
     svgStart.append('g')
@@ -187,5 +174,37 @@ function drawChart(){
             'fill':'url(#' + linearGradient.attr('id') + ')',
             'transform':'translate(40,-30)' 
         });
+
+// --- 繪製線段上的點 + hover標籤 ---
+    var _x = d3.time.format("%Y.%m.%d");
+    var circle = svgStart.append('g')
+        .selectAll('circle')
+        .data(mydata2)
+        .enter()
+        .append('circle')
+        .attr({
+            'fill': '#165A4A',
+            'opacity': .2,
+            'transform':'translate(40,-30)',
+            'r': 6
+        })
+        .attr("cx", function(d) {return scaleX(d.dates);})
+        .attr("cy", function(d) {return scaleY(d.val);})
+
+    circle.on("mouseover",function(d){
+        tooltip.html( _x(d.dates) + "<br />" + "淨值 : " + d.val)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 20) + "px")
+                .style("opacity", 1);
+        $(this).attr({'opacity': 1});
+    })
+    circle.on("mousemove",function(){
+        tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY + 20) + "px");
+    })
+    circle.on("mouseout",function(){
+        tooltip.style("opacity", 0);
+        $(this).attr({'opacity': .2});
+    });
 }
 sendRequest();
