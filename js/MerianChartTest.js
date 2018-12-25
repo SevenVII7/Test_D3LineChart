@@ -5,13 +5,17 @@ function sendRequest(){
     document.body.appendChild(scriptTag);
 }
 
-var mydata2 = [];
+var mydata2 = [],
+    mydata3 = [];
 function callback(response){
     mydata2 = response;
-    for(i=0; i<mydata2.length; i++){
+    for(i=0; i < mydata2.length; i++){
         mydata2[i].dates = new Date(mydata2[i].dates);
         mydata2[i].val = mydata2[i].val;
     };
+    for(k=0; k < 11; k++){
+        mydata3.push(mydata2[k]);
+    }
     drawChart();
 }
 
@@ -29,10 +33,10 @@ function drawChart(){
         }); //定義 append出的元素的屬性 d3可以用物件的寫法{"something": "some value",...}或直接 .attr("something","some value")
 
 // --- 綁資料 定義 D3比例尺 ---
-    var minX = d3.min(mydata2, function(d){return d.dates}),
-        maxX = d3.max(mydata2, function(d){return d.dates}),
-        minY = d3.min(mydata2, function(d){return parseInt(d.val) - 1}),
-        maxY = d3.max(mydata2, function(d){return parseInt(d.val) + 1}); // min() max() 抓出資料的最大最小值
+    var minX = d3.min(mydata3, function(d){return d.dates}),
+        maxX = d3.max(mydata3, function(d){return d.dates}),
+        minY = d3.min(mydata3, function(d){return parseInt(d.val) - 1}),
+        maxY = d3.max(mydata3, function(d){return parseInt(d.val) + 1}); // min() max() 抓出資料的最大最小值
     
     // 資料範圍
     var scaleX = d3.time.scale() // 先看下面, time.scale()跟下面那段的意思一樣, 大概是時間格式版本
@@ -162,7 +166,7 @@ function drawChart(){
 // --- 繪製線段 + 漸層區塊 ---
     svgStart.append('path')
         .attr({
-            'd':line(mydata2),
+            'd':line(mydata3),
             'stroke':'#165A4A',
             'stroke-width': '2px',
             'fill':'none',
@@ -170,7 +174,7 @@ function drawChart(){
         });
     svgStart.append('path')
         .attr({
-            'd':area(mydata2),
+            'd':area(mydata3),
             'fill':'url(#' + linearGradient.attr('id') + ')',
             'transform':'translate(40,-30)' 
         });
@@ -179,7 +183,7 @@ function drawChart(){
     var _x = d3.time.format("%Y.%m.%d");
     var circle = svgStart.append('g')
         .selectAll('circle')
-        .data(mydata2)
+        .data(mydata3)
         .enter()
         .append('circle')
         .attr({
