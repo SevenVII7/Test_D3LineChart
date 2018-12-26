@@ -115,16 +115,16 @@ function drawChart(){
         });
     linearGradient.append("stop")
         .attr("offset","0%")
-        .style("stop-color","rgba(22,90,74,.2)"); // 世界起始之色
+        .style("stop-color","rgba(22,90,74,.2)"); /*-*-* 始源之色 *-*-*/
     linearGradient.append("stop")
         .attr("offset","100%")
-        .style("stop-color","rgba(205,226,113,.2)"); // 世界終結之色
+        .style("stop-color","rgba(205,226,113,.2)"); /*-*-* 終結之色 *-*-*/
 
 // --- 定義 hover方塊 ---
     var tooltip = d3.select("body")
         .append("div")
         .attr("class","tooltip")
-        .style({"opacity": 0}); // 先生出一個隱形的 div等待 hover, 其他樣式我寫在HTML
+        .style({"opacity": 0,"z-index": -1}); // 先生出一個隱形的 div等待 hover, 其他樣式我寫在HTML
 
 // ========== 使用函式 ==========
 // --- 繪製座標 ---
@@ -223,15 +223,15 @@ function drawChart(){
         tooltip.html( _x(d.dates) + "<br />" + "淨值 : " + d.val)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY + 20) + "px")
-                .style("opacity", 1);
-        $(this).attr({'opacity': 1});
+                .style({"opacity": 1,"z-index": 1}); // hover標籤相關的
+        $(this).attr({'opacity': 1}); // 圓點的透明度改為1
     })
     circle.on("mousemove",function(){
         tooltip.style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY + 20) + "px");
     })
     circle.on("mouseout",function(){
-        tooltip.style("opacity", 0);
+        tooltip.style({"opacity": 0,"z-index": -1});
         $(this).attr({'opacity': .2});
     });
 }
