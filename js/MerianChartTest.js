@@ -2,7 +2,7 @@ var orignData = [],
     orignDataLen,
     getData = [],
     getLen = 7;
-    
+
 var btnW = $('#btnW'),
     btnM = $('#btnM'),
     btnTM = $('#btnTM'),
@@ -228,17 +228,27 @@ function drawChart(){
 
     circle.on("mouseover",function(d){
         tooltip.html( _x(d.dates) + "<br />" + "淨值 : " + d.val)
-                .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY + 20) + "px")
-                .style({"opacity": 1,"z-index": 1}); // hover標籤相關的
+            .style({
+                "left": (d3.event.pageX) + "px",
+                "top": (d3.event.pageY + 20) + "px",
+                "opacity": 1,
+                "z-index": 1
+            }); // hover標籤相關的
         $(this).attr({'opacity': 1}); // 圓點的透明度改為1
-    })
+    });
     circle.on("mousemove",function(){
-        tooltip.style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY + 20) + "px");
-    })
+        tooltip.style({
+            "left": (d3.event.pageX) + "px",
+            "top": (d3.event.pageY + 20) + "px"
+        });
+    });
     circle.on("mouseout",function(){
-        tooltip.style({"opacity": 0,"z-index": -1});
+        tooltip.style({
+            "left": 0 + "px",
+            "top": 0 + "px",
+            "opacity": 0,
+            "z-index": -1
+        });
         $(this).attr({'opacity': .2});
     });
 }
