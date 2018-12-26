@@ -5,16 +5,20 @@ function sendRequest(){
     document.body.appendChild(scriptTag);
 }
 
-var mydata2 = [],
-    mydata3 = [];
+var orignData = [],
+    getData = [],
+    getLen = 7;
 function callback(response){
-    mydata2 = response;
-    for(i=0; i < mydata2.length; i++){
-        mydata2[i].dates = new Date(mydata2[i].dates);
-        mydata2[i].val = mydata2[i].val;
+    orignData = response;
+    getData = [];
+    var orignDataLen = orignData.length;
+    for(i=0; i < orignDataLen; i++){
+        orignData[i].dates = new Date(orignData[i].dates); // 字串轉時間格式
+        orignData[i].val = parseFloat(orignData[i].val); // 字串轉一下數值
     };
-    for(k=0; k < 7; k++){
-        mydata3.push(mydata2[k]);
+    for(k=0; k < getLen; k++){
+        if(k >= orignDataLen){break}
+        getData.push(orignData[k]);
     };
     drawChart();
 }
@@ -33,17 +37,22 @@ function drawChart(){
         }); //定義 append出的元素的屬性 d3可以用物件的寫法{"something": "some value",...}或直接 .attr("something","some value")
 
 // --- 綁資料 定義 D3比例尺 ---
-    var minX = d3.min(mydata3, function(d){return d.dates}),
-        maxX = d3.max(mydata3, function(d){return d.dates}),
-        minY = d3.min(mydata3, function(d){return parseInt(d.val) - 1}),
-        maxY = d3.max(mydata3, function(d){return parseInt(d.val) + 1}); // min() max() 抓出資料的最大最小值
+    var minX = d3.min(getData, function(d){return d.dates}),
+        maxX = d3.max(getData, function(d){return d.dates}),
+        minY = d3.min(getData, function(d){return d.val}),
+        maxY = d3.max(getData, function(d){return d.val}), // min() max() 抓出資料的最大最小值
+        minY = minY - minY*0.05,
+        maxY = maxY + maxY*0.05; // 下面要定義資料範圍, 這邊把範圍最小值設定比資料最小值小一些, 最大值同理設大一些, 讓圖表畫面上看起來不那麼分散
     
     // 資料範圍
     var scaleX = d3.time.scale() // 先看下面, time.scale()跟下面那段的意思一樣, 大概是時間格式版本
-        .domain([minX,maxX])
-        .range([0,(w - 40)]);
+        .domain([minX, maxX])
+        .range([0,(w - 90)]);
+    var scaleX2 = d3.time.scale() // 無視這個 <--- 調整畫面用的, 因為scaleX被我縮了一些, 要加另外一條線壓在底下補滿用的變數
+        .domain([minX, maxX])
+        .range([0,(w - 50)]);
     var scaleY = d3.scale.linear()
-        .domain([minY,maxY]) // linear.domain([numbers]) 原始資料範圍
+        .domain([minY, maxY]) // linear.domain([numbers]) 原始資料範圍
         .range([h,40]); // linear.range([values]) 將原始資料範圍 塞回某個範圍 <-- 高度h到高度40(上至下), 這邊用40是因為下面我把所有東西都向上平移了40, 不縮回來圖表會被切掉
  
 // --- 套用定義出的比例尺 定義繪製 SVG線段 + 區域的布局(?) ---
@@ -66,9 +75,15 @@ function drawChart(){
         .orient("bottom")
         .tickFormat(d3.time.format("%Y.%m.%d")) // 改變底部座標軸顯示格式(Time Format) https://www.oxxostudio.tw/articles/201412/svg-d3-11-time.html
         .ticks(xTickNum); // axis.ticks 圖表座標軸分段, 運作原理: https://www.tangshuang.net/3270.html
+    var axisX2 = d3.svg.axis() // 無視這個 <--- scaleX2塞這
+        .scale(scaleX2)
+        .orient("bottom")
+        .tickFormat("")
+        .ticks(0);
     var axisY = d3.svg.axis()
         .scale(scaleY)
         .orient("left")
+        .tickFormat(function(d){return Math.round(d*10)/10;})
         .ticks(yTickNum);
 
 // --- 定義D3座標格線 ---
@@ -83,7 +98,7 @@ function drawChart(){
         .orient("left")
         .ticks(yTickNum)
         .tickFormat("") // 承上, 所以我們把tickFormat()設空, 不然會有兩個座標軸文字
-        .tickSize(-w+40,0); // tickSize() 是座標軸上刻度線條的尺寸，包含了內部線段和和最外邊的線段，共兩個數值 (我直接抄這邊的 https://www.oxxostudio.tw/articles/201411/svg-d3-04-axis.html)
+        .tickSize(-w+50,0); // tickSize() 是座標軸上刻度線條的尺寸，包含了內部線段和和最外邊的線段，共兩個數值 (我直接抄這邊的 https://www.oxxostudio.tw/articles/201411/svg-d3-04-axis.html)
 
 // --- 定義 SVG漸層 ---
     // SVG漸層要先定義<defs> <linearGradient> <stop>, 之後再呼叫<linearGradient>的 id : https://www.oxxostudio.tw/articles/201409/svg-25-gradients-patterns.html
@@ -116,7 +131,7 @@ function drawChart(){
         .attr({
             'fill':'none',
             'stroke':'#ddd',
-            'transform':'translate(40,'+(h-30)+')' 
+            'transform':'translate(50,'+(h-30)+')' 
         })
         .selectAll('text')
         .attr({
@@ -129,17 +144,24 @@ function drawChart(){
             'letter-spacing': '1px'
         });
     svgStart.append('g')
+        .call(axisX2)
+        .attr({
+            'fill':'none',
+            'stroke':'#ddd',
+            'transform':'translate(50,'+(h-30)+')' 
+        })
+    svgStart.append('g')
         .call(axisY)
         .attr({
             'fill':'none',
             'stroke':'#ddd',
-            'transform':'translate(40,-30)'
+            'transform':'translate(50,-30)'
         })
         .selectAll('text')
         .attr({
             'fill':'#000',
             'stroke':'none',
-            'transform':'translate(-10,0)'
+            'transform':'translate(-5,0)'
         })
         .style({
             'font-size':'12px',
@@ -152,7 +174,7 @@ function drawChart(){
         .attr({
             'fill':'none',
             'stroke':'#ddd',
-            'transform':'translate(40,'+(h-30)+')' 
+            'transform':'translate(50,'+(h-30)+')' 
         });
     svgStart.append('g')
         .call(axisYGrid)
@@ -160,36 +182,36 @@ function drawChart(){
             'fill':'none',
             'stroke':'#ddd',
             'stroke-dasharray':'5',
-            'transform':'translate(40,-30)'
+            'transform':'translate(50,-30)'
         });
 
 // --- 繪製線段 + 漸層區塊 ---
     svgStart.append('path')
         .attr({
-            'd':line(mydata3),
+            'd':line(getData),
             'stroke':'#165A4A',
             'stroke-width': '2px',
             'fill':'none',
-            'transform':'translate(40,-30)' 
+            'transform':'translate(50,-30)' 
         });
     svgStart.append('path')
         .attr({
-            'd':area(mydata3),
+            'd':area(getData),
             'fill':'url(#' + linearGradient.attr('id') + ')',
-            'transform':'translate(40,-30)' 
+            'transform':'translate(50,-30)' 
         });
 
 // --- 繪製線段上的點 + hover標籤 ---
     var _x = d3.time.format("%Y.%m.%d");
     var circle = svgStart.append('g')
         .selectAll('circle')
-        .data(mydata3)
+        .data(getData)
         .enter()
         .append('circle')
         .attr({
             'fill': '#165A4A',
             'opacity': .2,
-            'transform':'translate(40,-30)',
+            'transform':'translate(50,-30)',
             'r': 6
         })
         .attr("cx", function(d) {return scaleX(d.dates);})
@@ -212,3 +234,20 @@ function drawChart(){
     });
 }
 sendRequest();
+
+var btnW = $('#btnW'),
+    btnM = $('#btnM'),
+    btnTM = $('#btnTM'),
+    btnSM = $('#btnSM')
+    chartOuter = $('#content .chart');
+
+btnW.on('click', function(){
+    getLen = 7;
+    chartOuter.empty();
+    sendRequest();
+});
+btnM.on('click', function(){
+    getLen = 30;
+    chartOuter.empty();
+    sendRequest();
+});

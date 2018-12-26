@@ -14,9 +14,29 @@
         body{
             background-color: #ddd;
         }
-        #content{
-            width: 100%;
+        #content,
+        #btnset{
             padding: 30px;
+        }
+        #btnset{
+            margin: 0 30px;
+            background-color: #fff;
+            box-shadow: 3px 3px 8px rgba(0,0,0,.1);
+            text-align: center;
+        }
+        #btnset .btn{
+            display: inline-block;
+            color: #fff;
+            padding: 3px 10px;
+            margin: 0 10px;
+            background-color: #165A4A;
+            box-shadow: 3px 3px 8px rgba(0,0,0,.1);
+            transition: .25s;
+            cursor: pointer;
+        }
+        #btnset .btn:hover{
+            transform: translateX(-2px) translateY(-2px);
+            box-shadow: 5px 5px 8px rgba(0,0,0,.1);
         }
         .chart{
             width: 100%;
@@ -44,10 +64,10 @@
         <div class="chart"></div>
     </div>
     <div id="btnset">
-        <div class="btn">7日</div>
-        <div class="btn">14日</div>
-        <div class="btn">31日</div>
-        <div class="btn">30日</div>
+        <div id="btnW" class="btn">週</div>
+        <div id="btnM" class="btn">月</div>
+        <div id="btnTM" class="btn">近三月</div>
+        <div id="btnSM" class="btn">近六月</div>
     </div>
 </body>
 <script src="lib/d3.v3.min.js"></script>
