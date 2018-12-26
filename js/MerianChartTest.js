@@ -6,24 +6,26 @@ function sendRequest(){
 }
 
 var orignData = [],
+    orignDataLen,
     getData = [],
     getLen = 7;
 function callback(response){
     orignData = response;
-    getData = [];
-    var orignDataLen = orignData.length;
+    orignDataLen = orignData.length;
     for(i=0; i < orignDataLen; i++){
         orignData[i].dates = new Date(orignData[i].dates); // 字串轉時間格式
         orignData[i].val = parseFloat(orignData[i].val); // 字串轉一下數值
-    };
-    for(k=0; k < getLen; k++){
-        if(k >= orignDataLen){break}
-        getData.push(orignData[k]);
     };
     drawChart();
 }
 
 function drawChart(){
+    getData = [];
+    for(k=0; k < getLen; k++){
+        if(k >= orignDataLen){break}
+        getData.push(orignData[k]);
+    };
+    
 // --- 宣告長寬變數 ---
     var w = $(".chart").width(),
         h = 250; // 定義繪製 SVG的長寬
@@ -244,10 +246,20 @@ var btnW = $('#btnW'),
 btnW.on('click', function(){
     getLen = 7;
     chartOuter.empty();
-    sendRequest();
+    drawChart();
 });
 btnM.on('click', function(){
     getLen = 30;
     chartOuter.empty();
-    sendRequest();
+    drawChart();
+});
+btnTM.on('click', function(){
+    getLen = 90;
+    chartOuter.empty();
+    drawChart();
+});
+btnSM.on('click', function(){
+    getLen = 180;
+    chartOuter.empty();
+    drawChart();
 });
