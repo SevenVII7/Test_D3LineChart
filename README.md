@@ -5,9 +5,6 @@
 
 https://sevenvii7.github.io/D3LineChartTest/
 
-### index.html
-毫無反應就是個HTML, 開新檔案很麻煩CSS也寫在裡面
-
 ### js/MerianChartTest.js
 主要要跑的js<br/>
 裡面大致分4部分
