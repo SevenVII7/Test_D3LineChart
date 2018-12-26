@@ -15,7 +15,7 @@ https://sevenvii7.github.io/D3LineChartTest/
 #### sendRequest(){...}
 用來取得data的函式<br/>
 先宣告路徑, 然後在HTML DOM上生出一個帶路徑的<script>標籤<br/>
-這是一個
+這是一個jsonp的概念
 
 #### callback(response){...}
 使用data檔案定義好的callback把'所有資料'整理好塞進陣列
@@ -26,3 +26,4 @@ https://sevenvii7.github.io/D3LineChartTest/
 再使用新的資料去綁定D3的功能, 然後繪圖
 
 #### reqDarw(){...}
+決定要顯示的資料筆數
