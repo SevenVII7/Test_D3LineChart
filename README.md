@@ -26,4 +26,4 @@ https://sevenvii7.github.io/D3LineChartTest/
 再使用新的資料去綁定D3的功能, 然後繪圖
 
 #### reqDarw(){...}
-決定要顯示的資料筆數
+決定要顯示的資料長度
