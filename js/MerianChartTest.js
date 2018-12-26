@@ -1,3 +1,14 @@
+var orignData = [],
+    orignDataLen,
+    getData = [],
+    getLen = 7;
+    
+var btnW = $('#btnW'),
+    btnM = $('#btnM'),
+    btnTM = $('#btnTM'),
+    btnSM = $('#btnSM')
+    chartOuter = $('#content .chart');
+
 function sendRequest(){
     var url = "js/MerianChartTestData.js",
         scriptTag = document.createElement("script");
@@ -5,10 +16,6 @@ function sendRequest(){
     document.body.appendChild(scriptTag);
 }
 
-var orignData = [],
-    orignDataLen,
-    getData = [],
-    getLen = 7;
 function callback(response){
     orignData = response;
     orignDataLen = orignData.length;
@@ -235,31 +242,16 @@ function drawChart(){
         $(this).attr({'opacity': .2});
     });
 }
+
+function reqDarw(e){
+    getLen = e;
+    chartOuter.empty();
+    drawChart();
+}
+
 sendRequest();
 
-var btnW = $('#btnW'),
-    btnM = $('#btnM'),
-    btnTM = $('#btnTM'),
-    btnSM = $('#btnSM')
-    chartOuter = $('#content .chart');
-
-btnW.on('click', function(){
-    getLen = 7;
-    chartOuter.empty();
-    drawChart();
-});
-btnM.on('click', function(){
-    getLen = 30;
-    chartOuter.empty();
-    drawChart();
-});
-btnTM.on('click', function(){
-    getLen = 90;
-    chartOuter.empty();
-    drawChart();
-});
-btnSM.on('click', function(){
-    getLen = 180;
-    chartOuter.empty();
-    drawChart();
-});
+btnW.on('click', function(){ reqDarw(7); });
+btnM.on('click', function(){ reqDarw(30); });
+btnTM.on('click', function(){ reqDarw(90); });
+btnSM.on('click', function(){ reqDarw(180); });
