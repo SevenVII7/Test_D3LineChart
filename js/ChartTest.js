@@ -10,7 +10,7 @@ var btnW = $('#btnW'),
     chartOuter = $('#content .chart');
 
 function sendRequest(){
-    var url = "js/MerianChartTestData.js",
+    var url = "js/ChartTestData.js",
         scriptTag = document.createElement("script");
     scriptTag.src = url;
     document.body.appendChild(scriptTag);
