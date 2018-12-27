@@ -28,9 +28,12 @@ function callback(response){
 
 function drawChart(){
     getData = [];
-    for(k=0; k < getLen; k++){
-        if(k >= orignDataLen){break}
-        getData.push(orignData[k]);
+    for(k = 0; k < orignDataLen; k++){
+        if(k < orignDataLen - getLen){
+            continue;
+        }else{
+            getData.push(orignData[k]);
+        }
     };
     
 // --- 宣告長寬變數 ---
@@ -261,7 +264,23 @@ function reqDarw(e){
 
 sendRequest();
 
-btnW.on('click', function(){ reqDarw(7); });
-btnM.on('click', function(){ reqDarw(30); });
-btnTM.on('click', function(){ reqDarw(90); });
-btnSM.on('click', function(){ reqDarw(180); });
+btnW.on('click', function(){
+    $(this).addClass('active');
+    $(this).siblings().removeClass('active'); 
+    reqDarw(7); 
+});
+btnM.on('click', function(){
+    $(this).addClass('active');
+    $(this).siblings().removeClass('active'); 
+    reqDarw(30); 
+});
+btnTM.on('click', function(){
+    $(this).addClass('active');
+    $(this).siblings().removeClass('active'); 
+    reqDarw(90); 
+});
+btnSM.on('click', function(){
+    $(this).addClass('active');
+    $(this).siblings().removeClass('active'); 
+    reqDarw(180); 
+});
