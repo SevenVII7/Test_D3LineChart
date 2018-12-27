@@ -17,18 +17,28 @@
         #outer{
             width: 80%;
             margin: auto;
+            padding: 10px;
+            position: relative;
         }
         #content,
         #btnsetOuter{
             display: inline-block;
-            padding: 20px;
+            padding: 10px;
             vertical-align: top;
         }
-        #content{width: calc(80% - 4px);}
-        #btnsetOuter{width: calc(20% - 4px);}
+        #content{
+            width: calc(75% - 4px);
+            position: relative;
+            left: calc(25% - 4px);
+        }
+        #btnsetOuter{
+            width: calc(25% - 4px);
+            position: relative;
+            right: calc(75% - 4px);
+        }
         #btnset{
             width: 100%;
-            height: 294px;
+            height: 274px;
             padding: 30px;
             background-color: rgba(255,255,255,1);
             box-shadow: 3px 3px 8px rgba(0,0,0,.1);
@@ -45,6 +55,9 @@
             transition: .25s;
             cursor: pointer;
         }
+        #btnset .btn:nth-last-child(1){
+            margin-bottom: 0;
+        }
         #btnset .btn.active{
             background-color: #f2b21a;
         }
@@ -54,7 +67,7 @@
         }
         .chart{
             width: 100%;
-            padding: 20px;
+            padding: 10px;
             display: inline-block;
             background-color: #fff;
             box-shadow: 3px 3px 8px rgba(0,0,0,.1);
@@ -70,14 +83,29 @@
             border: #165A4A 2px solid;
             background-color: white;
         }
-        @media screen and (max-width: 425px){
-            #btnset{
-                padding: 15px;
+        @media screen and (max-width: 1200px){
+            #outer{
+                width: 90%;
+                margin: auto;
             }
-            #btnset .btn{
-                width: calc(25% - 5px);
-                padding: 3px 0;
-                margin: 0 1px;
+            #content{width: calc(75% - 4px);}
+            #btnsetOuter{width: calc(25% - 4px);}
+        }
+        @media screen and (max-width: 768px){
+            #content{
+                width: 100%;
+                left: 0;
+            }
+            #btnsetOuter{
+                width: 100%;
+                right: 0;
+            }
+            #btnset{height: auto;}
+        }
+        @media screen and (max-width: 600px){
+            #outer{
+                width: 100%;
+                margin: auto;
             }
         }
     </style>
@@ -85,6 +113,9 @@
 </head>
 <body>
     <div id="outer">
+        <div id="content">
+            <div class="chart"></div>
+        </div>
         <div id="btnsetOuter">
             <div id="btnset">
                 <div id="btnW" class="btn active">週</div>
@@ -92,9 +123,6 @@
                 <div id="btnTM" class="btn">近三月</div>
                 <div id="btnSM" class="btn">近六月</div>
             </div>
-        </div>
-        <div id="content">
-            <div class="chart"></div>
         </div>
     </div>
     
