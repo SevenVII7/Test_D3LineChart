@@ -222,7 +222,7 @@ function drawChart(){
         .append('circle')
         .attr({
             'fill': '#165A4A',
-            'opacity': .2,
+            'opacity': 0,
             'transform':'translate(50,-30)',
             'r': 6
         })
@@ -252,7 +252,7 @@ function drawChart(){
             "opacity": 0,
             "z-index": -1
         });
-        $(this).attr({'opacity': .2});
+        $(this).attr({'opacity': 0});
     });
 }
 
