@@ -256,6 +256,7 @@ function drawChart(){
     });
 }
 
+
 function reqDarw(e){
     getLen = e;
     chartOuter.empty();
